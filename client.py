@@ -4,10 +4,11 @@ import wave
 from io import BytesIO
 import numpy as np
 
+
 def tts_client(api_url: str, text: str):
     """
     Sends text to the TTS API, receives audio, and plays it.
-    
+
     Args:
         api_url (str): The URL of the TTS API endpoint.
         text (str): The text to synthesize into speech.
@@ -16,7 +17,7 @@ def tts_client(api_url: str, text: str):
         # Send text to the API
         response = requests.post(api_url, json={"tts_text": text})
         response.raise_for_status()  # Raise exception for HTTP errors
-        
+
         # Convert response bytes to a WAV file object
         audio_bytes = BytesIO(response.content)
         with wave.open(audio_bytes, "rb") as wav_file:
@@ -27,7 +28,7 @@ def tts_client(api_url: str, text: str):
 
         # Convert audio data to NumPy array for playback
         audio_array = np.frombuffer(audio_data, dtype=np.int16)
-        
+
         # Play audio using sounddevice
         print("Playing audio...")
         sd.play(audio_array, samplerate=sample_rate)
@@ -38,6 +39,7 @@ def tts_client(api_url: str, text: str):
         print(f"Error communicating with the TTS API: {e}")
     except Exception as e:
         print(f"An error occurred: {e}")
+
 
 if __name__ == "__main__":
     # Define the API URL
